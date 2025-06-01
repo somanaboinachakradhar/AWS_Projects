@@ -1,0 +1,96 @@
+IAM Role Setup Instructions
+This document provides step-by-step instructions to create an IAM role for the serverless login and registration system project. The IAM role (LambdaDynamoDBRole) grants the Lambda functions (LoginFunction and RegisterFunction) permissions to access DynamoDB and write logs to CloudWatch.
+Step 1: Create the IAM Role
+
+Log into AWS Console:
+
+Open the AWS Management Console (https://console.aws.amazon.com/).
+Search for IAM in the search bar and select it.
+
+
+Create a New Role:
+
+In the IAM dashboard, click Roles in the left sidebar.
+Click Create role.
+Trusted Entity: Select AWS service.
+Use Case: Choose Lambda (this allows the role to be used by Lambda functions).
+Click Next.
+
+
+Add Permissions:
+
+In the Permissions step, search for and attach the following policies:
+AWSLambdaBasicExecutionRole:
+This policy allows the Lambda function to write logs to CloudWatch.
+Search for AWSLambdaBasicExecutionRole, check the box, and leave the default settings.
+
+AmazonDynamoDBFullAccess:
+This policy grants full access to DynamoDB, allowing the Lambda functions to read from and write to the Users table.
+Search for AmazonDynamoDBFullAccess, check the box, and leave the default settings.
+
+Click Next.
+
+
+Name the Role:
+
+Role Name: Enter LambdaDynamoDBRole.
+Description (optional): "Role for Lambda functions to access DynamoDB and write logs."
+Click Create role.
+
+
+
+Step 2: Attach the Role to Lambda Functions
+The IAM role must be attached to both Lambda functions (LoginFunction and RegisterFunction) to grant them the necessary permissions.
+
+Go to Lambda:
+
+In the AWS Console, search for Lambda and select it.
+Select the LoginFunction function from the list.
+
+
+Attach the Role to LoginFunction:
+
+In the Lambda function’s dashboard, go to the Configuration tab.
+Click Permissions in the left sidebar.
+Under Execution role, click the role name (if a default role was created) or Edit.
+Role Name: Select LambdaDynamoDBRole from the dropdown.
+Click Save.
+
+Repeat for RegisterFunction:
+
+Go to the RegisterFunction function.
+Repeat the steps above to attach the LambdaDynamoDBRole.
+
+Step 3: Verify Permissions
+
+Check Role Policies:
+
+Go back to IAM > Roles > LambdaDynamoDBRole.
+Under Permissions, ensure the following policies are attached:
+AWSLambdaBasicExecutionRole
+AmazonDynamoDBFullAccess
+
+
+Test Lambda Functions:
+
+Go to Lambda > LoginFunction > Test.
+Create a test event with the following JSON:{
+    "body": "{\"username\": \"testuser\", \"password\": \"testpass\"}"
+}
+
+
+Run the test. If successful, you should see a response like {"message": "Hey, welcome!"}.
+If there’s a permissions error (e.g., "Access Denied" for DynamoDB), double-check the role policies.
+
+Troubleshooting Tips
+
+Access Denied Errors: If the Lambda function cannot access DynamoDB, ensure the AmazonDynamoDBFullAccess policy is attached to the role.
+CloudWatch Logs Missing: If logs aren’t appearing in CloudWatch, ensure the AWSLambdaBasicExecutionRole policy is attached.
+Wrong Role Attached: If the wrong role is attached to a Lambda function, edit the execution role in the Lambda console as described in Step 2.
+
+Notes
+
+Security: The AmazonDynamoDBFullAccess policy grants broad permissions to DynamoDB. In a production environment, create a custom policy with least privilege (e.g., only allow read/write to the Users table).
+Role Name: The role name LambdaDynamoDBRole is used in this project. Ensure consistency when attaching it to Lambda functions.
+Cost: IAM roles are free to create and use, but monitor Lambda and DynamoDB usage to stay within the AWS Free Tier.
+
