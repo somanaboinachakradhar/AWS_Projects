@@ -1,0 +1,69 @@
+DynamoDB Setup Instructions
+This document provides step-by-step instructions to set up a DynamoDB table for the serverless login and registration system project. DynamoDB is used to store user data, including usernames, full names, and passwords.
+Step 1: Create the Users Table
+
+Log into AWS Console:
+
+Open the AWS Management Console (https://console.aws.amazon.com/).
+Search for DynamoDB in the search bar and select it.
+
+Create a New Table:
+
+In the DynamoDB dashboard, click Tables in the left sidebar.
+Click Create table.
+Table Name: Enter Users.
+Partition Key: Enter username and set the type to String.
+Note: A partition key is required to uniquely identify each item in the table. We use username because each user must have a unique username.
+
+
+Sort Key: Leave this blank (not needed for this project).
+Table Settings: Use the default settings (e.g., On-demand capacity mode to avoid provisioning read/write capacity manually).
+Click Create table.
+
+Wait for Table Creation:
+
+It may take a few seconds for the table to be created. Once ready, the table status will change to Active.
+
+Step 2: Add a Test User (Optional)
+To test the application, you can add a test user to the table.
+
+Go to the Items Tab:
+
+In the DynamoDB dashboard, select the Users table.
+Click the Items tab.
+Click Create item.
+
+Add Test User Data:
+
+In the form, add the following attributes:
+username (String): testuser
+Click Add new attribute > String:
+Name: name, Value: Test User
+
+Click Add new attribute > String:
+Name: password, Value: testpass
+
+Click Save.
+
+Verify the Test User:
+
+You should see the new item in the table with username: testuser, name: Test User, and password: testpass.
+This user can be used to test the login functionality (e.g., username: testuser, password: testpass).
+
+Step 3: Verify Table Settings
+
+Table Name: Ensure the table is named Users (case-sensitive), as the Lambda functions (LoginFunction and RegisterFunction) are coded to interact with this table.
+Primary Key: Confirm the partition key is username (String).
+Capacity Mode: On-demand is recommended for this project to avoid manual scaling, especially since this is a demo project with low traffic.
+
+Troubleshooting Tips
+
+Table Not Found: If the Lambda functions return errors like "Table not found," ensure the table name is exactly Users and that it’s created in the correct region (e.g., ap-south-1).
+Permission Issues: If the Lambda functions cannot access the table, ensure the IAM role (LambdaDynamoDBRole) has the AmazonDynamoDBFullAccess policy attached. See iam_role_setup.md for details.
+Data Not Saved: If registration fails to save data, check the Lambda logs in CloudWatch for errors (e.g., incorrect attribute names or types).
+
+Notes
+
+Region: This setup assumes the ap-south-1 region (Mumbai). Adjust the region in the AWS Console if you’re using a different region.
+Security: Passwords are stored in plain text for this demo project, which is not secure for production. In a real application, use AWS Cognito or hash passwords (e.g., with bcrypt).
+Cost: DynamoDB’s Free Tier includes 25 read/write capacity units per month, which is sufficient for this project. Monitor usage in the AWS Billing Dashboard to avoid charges.
