@@ -13,12 +13,18 @@ Serverless back-end using AWS Lambda and API Gateway.
 Data storage in DynamoDB with a Users table.
 
 Screenshots
+
 Login Page
-  see screenshots/loginpage.png
+  
+    see screenshots/loginpage.png
 
 Registration Page
-  see screenshots/register.png
+  
+  
+    see screenshots/register.png
+
 Welcome Page
+
     see screenshots/welcome.png
 Architecture
 This project follows a serverless architecture with the following components:
@@ -34,12 +40,15 @@ IAM Role: A custom role (LambdaDynamoDBRole) grants Lambda functions access to D
 CORS: Configured in API Gateway to allow cross-origin requests from the S3-hosted front-end.
 
 Architecture Diagram
+```
 [User] --> [S3 Static Website]
                   |
                   v
 [API Gateway] --> [Lambda Functions] --> [DynamoDB]
+```
 
 Project Structure
+```
 login-registration-system/
 ├── frontend/
 │   ├── login.html          # Login page
@@ -57,7 +66,7 @@ login-registration-system/
 │   ├── register_page.png    # Screenshot of registration page
 │   └── welcome_page.png     # Screenshot of welcome page
 └── README.md               # Project documentation
-
+```
 Setup Instructions
 To replicate this project, follow these steps. Note: This project uses AWS services, so an AWS account is required. Stay within the Free Tier to avoid charges.
 Prerequisites
